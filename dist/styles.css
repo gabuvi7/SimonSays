@@ -20,11 +20,17 @@ body {
   height: 100vh;
 }
 
+.newBackground {
+  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-1188/1_mercury.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 #titleGame {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-
 
 .headline {
   align-items: center;
@@ -32,7 +38,7 @@ body {
   display: flex;
   font-size: calc(1rem + 10vmin);
   height: 98vh;
-  margin-top:5px;
+  margin-top: 5px;
   margin-bottom: 5px;
   justify-content: center;
   overflow: hidden;
@@ -70,7 +76,7 @@ body {
 
 .headline--jump .char {
   --name: jump;
-  --dur: 1990ms ;
+  --dur: 1990ms;
   --del: calc(var(--char-index) * 0.075s);
   --tf: cubic-bezier(0.165, 0.44, 0.64, 1);
 }

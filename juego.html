@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
 
         const blue = document.getElementById('blue');
@@ -42,8 +42,10 @@
         const green = document.getElementById('green');
         const btnStart = document.getElementById('idStartGame');
         const endGame = 10;
+
         class Game {
             constructor() {
+                this.init = this.init.bind(this);
                 this.init();
                 this.generateSequence();
                 setTimeout(() => {
@@ -52,15 +54,23 @@
             }
 
             init() {
-                this.colourSelect = this.colourSelect.bind(this)
-                this.nextLevel = this.nextLevel.bind(this)
-                btnStart.classList.add('hide');
+                this.colourSelect = this.colourSelect.bind(this);
+                this.nextLevel = this.nextLevel.bind(this);
+                this.toggleBtnStart();
                 this.level = 1;
                 this.colours = {
                     blue,
                     red,
                     yellow,
                     green
+                }
+            }
+
+            toggleBtnStart(){
+                if (btnStart.classList.contains('hide')){
+                    btnStart.classList.remove('hide');
+                }else{
+                    btnStart.classList.add('hide');
                 }
             }
 
@@ -141,16 +151,31 @@
                         this.level++;
                         this.deleteClickEvents();
                         if (this.level === (endGame + 1)) {
-                            //Win or Lose the game 
+                            this.winTheGame();
                         }
                         else {
                             setTimeout(this.nextLevel, 1500);
                         }
                     }
                 } else {
-                    //Lose
+                    this.loseTheGame();
                 }
             }
+
+            winTheGame(){
+                swal('Simon Says', 'Congrats, you win!!', 'success')
+                .then(this.init);
+            }
+
+            loseTheGame(){
+                swal('Simon Says', 'You lose, you can play again.', 'error')
+                .then(() => {
+                    this.deleteClickEvents();
+                    this.init();
+                });
+            }
+
+
 
         }
         function startGame() {

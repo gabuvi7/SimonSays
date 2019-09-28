@@ -22,7 +22,7 @@ button:not(#idStartGame) {
 }
 
 #idStartGame {
-  background: linear-gradient(85deg, rgb(255, 186, 209), rgb(124, 44, 71)  95%);
+  background: linear-gradient(85deg, rgb(255, 186, 209), rgb(124, 44, 71) 95%);
   height: 50px;
   width: 350px;
   color: white;
@@ -35,7 +35,7 @@ button:not(#idStartGame) {
 }
 
 #blue {
-  background-color: blue;
+  background-color: rgb(0, 0, 134);
   border-top-left-radius: 200px;
 }
 
@@ -52,4 +52,24 @@ button:not(#idStartGame) {
 #green {
   background-color: green;
   border-bottom-right-radius: 200px;
+}
+
+#blue.light{
+    background-color: rgb(119, 119, 255);
+}
+
+#red.light{
+    background-color: rgb(255, 145, 145);
+}
+
+#yellow.light{
+    background-color: rgb(255, 255, 152);
+}
+
+#green.light{
+    background-color: rgb(128, 255, 128);
+}
+
+.hide {
+    display: none !important;
 }

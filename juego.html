@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <button id="idStartGame">Empieza el juego!</button>
+                <button id="idStartGame" onclick="startGame()">Empieza el juego!</button>
             </div>
             <div class="row">
                 <div class="col-6 p-0 ">
@@ -33,6 +33,75 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        const blue = document.getElementById('blue');
+        const red = document.getElementById('red');
+        const yellow = document.getElementById('yellow');
+        const green = document.getElementById('green');
+        const btnStart = document.getElementById('idStartGame');
+
+        class Game {
+            constructor() {
+                this.init();
+                this.generateSequence();
+                this.nextLevel();
+            }
+
+            init() {
+                btnStart.classList.add('hide');
+                this.level = 1;
+                this.colours = {
+                    blue,
+                    red,
+                    yellow,
+                    green
+                }
+            }
+
+            generateSequence() {
+                this.sequence = new Array(10).fill(0).map(n => Math.floor(Math.random() * 4))
+            }
+
+            nextLevel() {
+                this.lightUpSequence();
+            }
+
+            transformNumbersToColours(num) {
+                switch (num) {
+                    case 0:
+                        return 'blue';
+                    case 1:
+                        return 'red';
+                    case 2:
+                        return 'yellow';
+                    case 3:
+                        return 'green';
+                }
+            }
+
+            lightUpSequence() {
+                for (let i = 0; i < this.level; i++) {
+                    const colour = this.transformNumbersToColours(this.sequence[i]);
+                   setTimeout( () => this.turnOnColour(colour), 1000 * i);
+                }
+            }
+
+            turnOnColour(colour){
+                this.colours[colour].classList.add('light');
+                setTimeout( () => this.turnOffColour(colour), 350)
+            }
+
+            turnOffColour(colour){
+                this.colours[colour].classList.remove('light');
+            }
+
+        }
+        function startGame() {
+            window.game = new Game();
+        }
+    </script>
 </body>
 <footer>
 

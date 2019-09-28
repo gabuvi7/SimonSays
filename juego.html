@@ -14,10 +14,10 @@
         <div class="container align-self-center">
             <div class="row">
                 <div class="col-6 p-0 ">
-                    <button class="float-right" id="blue"></button>
+                    <button class="float-right" id="blue" data-colour="blue"></button>
                 </div>
                 <div class="col-6 p-0">
-                    <button class="float-left" id="red"></button>
+                    <button class="float-left" id="red" data-colour="red"></button>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -25,10 +25,10 @@
             </div>
             <div class="row">
                 <div class="col-6 p-0 ">
-                    <button class="float-right" id="yellow"></button>
+                    <button class="float-right" id="yellow" data-colour="yellow"></button>
                 </div>
                 <div class="col-6 p-0 float-rigth">
-                    <button class="float-left" id="green"></button>
+                    <button class="float-left" id="green" data-colour="green"></button>
                 </div>
             </div>
         </div>
@@ -41,16 +41,19 @@
         const yellow = document.getElementById('yellow');
         const green = document.getElementById('green');
         const btnStart = document.getElementById('idStartGame');
-
+        const endGame = 10;
         class Game {
             constructor() {
                 this.init();
                 this.generateSequence();
-                this.nextLevel();
+                setTimeout(() => {
+                    this.nextLevel();
+                }, 500);
             }
 
             init() {
-                this.selectColour = this.selectColour.bind(this);
+                this.colourSelect = this.colourSelect.bind(this)
+                this.nextLevel = this.nextLevel.bind(this)
                 btnStart.classList.add('hide');
                 this.level = 1;
                 this.colours = {
@@ -62,10 +65,11 @@
             }
 
             generateSequence() {
-                this.sequence = new Array(10).fill(0).map(n => Math.floor(Math.random() * 4))
+                this.sequence = new Array(endGame).fill(0).map(n => Math.floor(Math.random() * 4))
             }
 
             nextLevel() {
+                this.subLevel = 0;
                 this.lightUpSequence();
                 this.addClickEvents();
             }
@@ -83,33 +87,69 @@
                 }
             }
 
-            lightUpSequence() {
-                for (let i = 0; i < this.level; i++) {
-                    const colour = this.transformNumbersToColours(this.sequence[i]);
-                   setTimeout( () => this.turnOnColour(colour), 1000 * i);
+            transformColoursToNumbers(colour) {
+                switch (colour) {
+                    case 'blue':
+                        return 0;
+                    case 'red':
+                        return 1;
+                    case 'yellow':
+                        return 2;
+                    case 'green':
+                        return 3;
                 }
             }
 
-            turnOnColour(colour){
-                this.colours[colour].classList.add('light');
-                setTimeout( () => this.turnOffColour(colour), 350)
+            lightUpSequence() {
+                for (let i = 0; i < this.level; i++) {
+                    const colour = this.transformNumbersToColours(this.sequence[i]);
+                    setTimeout(() => this.turnOnColour(colour), 1000 * i);
+                }
             }
 
-            turnOffColour(colour){
+            turnOnColour(colour) {
+                this.colours[colour].classList.add('light');
+                setTimeout(() => this.turnOffColour(colour), 350)
+            }
+
+            turnOffColour(colour) {
                 this.colours[colour].classList.remove('light');
             }
 
             addClickEvents() {
-                this.colours.blue.addEventListener('click', this.selectColour)
-                this.colours.red.addEventListener('click', this.selectColour)
-                this.colours.yellow.addEventListener('click', this.selectColour)
-                this.colours.green.addEventListener('click', this.selectColour)
+                this.colours.blue.addEventListener('click', this.colourSelect)
+                this.colours.red.addEventListener('click', this.colourSelect)
+                this.colours.yellow.addEventListener('click', this.colourSelect)
+                this.colours.green.addEventListener('click', this.colourSelect)
             }
 
-            selectColour(ev) {
-                console.log(this);
-                
-                
+            deleteClickEvents() {
+                this.colours.blue.removeEventListener('click', this.colourSelect)
+                this.colours.red.removeEventListener('click', this.colourSelect)
+                this.colours.yellow.removeEventListener('click', this.colourSelect)
+                this.colours.green.removeEventListener('click', this.colourSelect)
+            }
+
+            colourSelect(ev) {
+                const colourName = ev.target.dataset.colour;
+                const colourNumber = this.transformColoursToNumbers(colourName);
+                this.turnOnColour(colourName);
+
+                if (colourNumber === this.sequence[this.subLevel]) {
+                    this.subLevel++;
+                    if (this.subLevel === this.level) {
+                        this.level++;
+                        this.deleteClickEvents();
+                        if (this.level === (endGame + 1)) {
+                            //Win or Lose the game 
+                        }
+                        else {
+                            setTimeout(this.nextLevel, 1500);
+                        }
+                    }
+                } else {
+                    //Lose
+                }
             }
 
         }

@@ -7,10 +7,19 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" href="dist/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid d-flex " id="idBox">
+    <div id="containerHeadlineJump" class="container-fluid">
+        <h2 data-splitting class="headline headline--jump" id="titleGame">Welcome to Simon Says!</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button id="idStartGame" onclick="startGame()">Start the game!</button>
+    </div>
+    <div class="container-fluid hide" id="idBox">
         <div class="container align-self-center">
             <div class="row">
                 <div class="col-6 p-0 ">
@@ -19,9 +28,6 @@
                 <div class="col-6 p-0">
                     <button class="float-left" id="red" data-colour="red"></button>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <button id="idStartGame" onclick="startGame()">Empieza el juego!</button>
             </div>
             <div class="row">
                 <div class="col-6 p-0 ">
@@ -33,15 +39,17 @@
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-
+        Splitting();
         const blue = document.getElementById('blue');
         const red = document.getElementById('red');
         const yellow = document.getElementById('yellow');
         const green = document.getElementById('green');
         const btnStart = document.getElementById('idStartGame');
-        const endGame = 10;
+        const headlineJump = document.getElementById('containerHeadlineJump');
+        const idBox = document.getElementById('idBox');
+        const endGame = 1;
 
         class Game {
             constructor() {
@@ -66,10 +74,12 @@
                 }
             }
 
-            toggleBtnStart(){
-                if (btnStart.classList.contains('hide')){
+            toggleBtnStart() {
+                if (btnStart.classList.contains('hide')) {
+                    idBox.classList.add('hide');
+                    headlineJump.classList.remove('hide');
                     btnStart.classList.remove('hide');
-                }else{
+                } else {
                     btnStart.classList.add('hide');
                 }
             }
@@ -162,23 +172,26 @@
                 }
             }
 
-            winTheGame(){
+            winTheGame() {
                 swal('Simon Says', 'Congrats, you win!!', 'success')
-                .then(this.init);
+                    .then(this.init);
             }
 
-            loseTheGame(){
+            loseTheGame() {
                 swal('Simon Says', 'You lose, you can play again.', 'error')
-                .then(() => {
-                    this.deleteClickEvents();
-                    this.init();
-                });
+                    .then(() => {
+                        this.deleteClickEvents();
+                        this.init();
+                    });
             }
 
 
 
         }
         function startGame() {
+            headlineJump.classList.add('hide');
+            idBox.classList.remove('hide');
+            idBox.classList.add('d-flex');
             window.game = new Game();
         }
     </script>

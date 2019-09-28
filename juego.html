@@ -53,7 +53,7 @@
         const headlineJump = document.getElementById('containerHeadlineJump');
         const idBox = document.getElementById('idBox');
         const idTimer = document.getElementById('idTimer');
-        const endGame = 1;
+        const endGame = 10;
         var t;
         class Game {
             constructor() {
@@ -67,11 +67,7 @@
             }
 
             init() {
-                var s = 0;
-                var m = 0;
-
-                t = this.interval(m, s);
-
+                this.interval();
                 this.colourSelect = this.colourSelect.bind(this);
                 this.nextLevel = this.nextLevel.bind(this);
                 this.toggleBtnStart();
@@ -95,7 +91,7 @@
             }
 
             generateSequence() {
-                this.sequence = new Array(endGame).fill(0).map(n => Math.floor(Math.random() * 4))
+                this.sequence = new Array(endGame).fill(0).map(n => Math.floor(Math.random() * 4));
             }
 
             nextLevel() {
@@ -187,7 +183,7 @@
             }
 
             winTheGame() {
-                swal('Simon Says', `Congrats, you win!! Your time is: ${t} seconds`, 'success')
+                swal('Simon Says', `Congrats, you win!!`, 'success')
                     .then(() => {
                         this.resetInterval(t);
                         this.init();
@@ -207,8 +203,8 @@
                 clearInterval(t);
             }
 
-            interval(m, s) {
-                
+            interval() {
+                var m = 0, s = 0;
                 return setInterval(() => {
                     if (s < 10 && (m === 0 || m < 60) && m < 10) {
                         idTimer.innerHTML = '0' + m + ': 0' + s++;

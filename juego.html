@@ -7,32 +7,194 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" href="dist/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid d-flex " id="idBox">
+    <div id="containerHeadlineJump" class="container-fluid">
+        <h2 data-splitting class="headline headline--jump" id="titleGame">Welcome to Simon Says!</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button id="idStartGame" onclick="startGame()">Start the game!</button>
+    </div>
+    <div class="container-fluid hide" id="idBox">
         <div class="container align-self-center">
             <div class="row">
                 <div class="col-6 p-0 ">
-                    <button class="float-right" id="blue"></button>
+                    <button class="float-right" id="blue" data-colour="blue"></button>
                 </div>
                 <div class="col-6 p-0">
-                    <button class="float-left" id="red"></button>
+                    <button class="float-left" id="red" data-colour="red"></button>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <button id="idStartGame">Empieza el juego!</button>
             </div>
             <div class="row">
                 <div class="col-6 p-0 ">
-                    <button class="float-right" id="yellow"></button>
+                    <button class="float-right" id="yellow" data-colour="yellow"></button>
                 </div>
                 <div class="col-6 p-0 float-rigth">
-                    <button class="float-left" id="green"></button>
+                    <button class="float-left" id="green" data-colour="green"></button>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        Splitting();
+        const blue = document.getElementById('blue');
+        const red = document.getElementById('red');
+        const yellow = document.getElementById('yellow');
+        const green = document.getElementById('green');
+        const btnStart = document.getElementById('idStartGame');
+        const headlineJump = document.getElementById('containerHeadlineJump');
+        const idBox = document.getElementById('idBox');
+        const endGame = 1;
+
+        class Game {
+            constructor() {
+                this.init = this.init.bind(this);
+                this.init();
+                this.generateSequence();
+                setTimeout(() => {
+                    this.nextLevel();
+                }, 500);
+            }
+
+            init() {
+                this.colourSelect = this.colourSelect.bind(this);
+                this.nextLevel = this.nextLevel.bind(this);
+                this.toggleBtnStart();
+                this.level = 1;
+                this.colours = {
+                    blue,
+                    red,
+                    yellow,
+                    green
+                }
+            }
+
+            toggleBtnStart() {
+                if (btnStart.classList.contains('hide')) {
+                    idBox.classList.add('hide');
+                    headlineJump.classList.remove('hide');
+                    btnStart.classList.remove('hide');
+                } else {
+                    btnStart.classList.add('hide');
+                }
+            }
+
+            generateSequence() {
+                this.sequence = new Array(endGame).fill(0).map(n => Math.floor(Math.random() * 4))
+            }
+
+            nextLevel() {
+                this.subLevel = 0;
+                this.lightUpSequence();
+                this.addClickEvents();
+            }
+
+            transformNumbersToColours(num) {
+                switch (num) {
+                    case 0:
+                        return 'blue';
+                    case 1:
+                        return 'red';
+                    case 2:
+                        return 'yellow';
+                    case 3:
+                        return 'green';
+                }
+            }
+
+            transformColoursToNumbers(colour) {
+                switch (colour) {
+                    case 'blue':
+                        return 0;
+                    case 'red':
+                        return 1;
+                    case 'yellow':
+                        return 2;
+                    case 'green':
+                        return 3;
+                }
+            }
+
+            lightUpSequence() {
+                for (let i = 0; i < this.level; i++) {
+                    const colour = this.transformNumbersToColours(this.sequence[i]);
+                    setTimeout(() => this.turnOnColour(colour), 1000 * i);
+                }
+            }
+
+            turnOnColour(colour) {
+                this.colours[colour].classList.add('light');
+                setTimeout(() => this.turnOffColour(colour), 350)
+            }
+
+            turnOffColour(colour) {
+                this.colours[colour].classList.remove('light');
+            }
+
+            addClickEvents() {
+                this.colours.blue.addEventListener('click', this.colourSelect)
+                this.colours.red.addEventListener('click', this.colourSelect)
+                this.colours.yellow.addEventListener('click', this.colourSelect)
+                this.colours.green.addEventListener('click', this.colourSelect)
+            }
+
+            deleteClickEvents() {
+                this.colours.blue.removeEventListener('click', this.colourSelect)
+                this.colours.red.removeEventListener('click', this.colourSelect)
+                this.colours.yellow.removeEventListener('click', this.colourSelect)
+                this.colours.green.removeEventListener('click', this.colourSelect)
+            }
+
+            colourSelect(ev) {
+                const colourName = ev.target.dataset.colour;
+                const colourNumber = this.transformColoursToNumbers(colourName);
+                this.turnOnColour(colourName);
+
+                if (colourNumber === this.sequence[this.subLevel]) {
+                    this.subLevel++;
+                    if (this.subLevel === this.level) {
+                        this.level++;
+                        this.deleteClickEvents();
+                        if (this.level === (endGame + 1)) {
+                            this.winTheGame();
+                        }
+                        else {
+                            setTimeout(this.nextLevel, 1500);
+                        }
+                    }
+                } else {
+                    this.loseTheGame();
+                }
+            }
+
+            winTheGame() {
+                swal('Simon Says', 'Congrats, you win!!', 'success')
+                    .then(this.init);
+            }
+
+            loseTheGame() {
+                swal('Simon Says', 'You lose, you can play again.', 'error')
+                    .then(() => {
+                        this.deleteClickEvents();
+                        this.init();
+                    });
+            }
+
+
+
+        }
+        function startGame() {
+            headlineJump.classList.add('hide');
+            idBox.classList.remove('hide');
+            idBox.classList.add('d-flex');
+            window.game = new Game();
+        }
+    </script>
 </body>
 <footer>
 

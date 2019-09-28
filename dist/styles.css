@@ -1,3 +1,7 @@
+* {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
 body {
   background: linear-gradient(
       217deg,
@@ -16,18 +20,127 @@ body {
   height: 100vh;
 }
 
+#titleGame {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+
+.headline {
+  align-items: center;
+  background-color: var(--color);
+  display: flex;
+  font-size: calc(1rem + 10vmin);
+  height: 98vh;
+  margin-top:5px;
+  margin-bottom: 5px;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  scroll-snap-align: start;
+}
+
+.headline:nth-child(1) {
+  --color: #f9ca24;
+}
+
+.word,
+.char {
+  -webkit-animation-delay: var(--del);
+  animation-delay: var(--del);
+  -webkit-animation-direction: var(--dir, normal);
+  animation-direction: var(--dir, normal);
+  -webkit-animation-duration: var(--dur);
+  animation-duration: var(--dur);
+  -webkit-animation-iteration-count: var(--it, infinite);
+  animation-iteration-count: var(--it, infinite);
+  -webkit-animation-name: var(--name);
+  animation-name: var(--name);
+  -webkit-animation-timing-function: var(--tf);
+  animation-timing-function: var(--tf);
+  -webkit-animation-fill-mode: var(--fill, forwards);
+  animation-fill-mode: var(--fill, forwards);
+  display: inline-block;
+  position: relative;
+  -webkit-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  z-index: 1;
+}
+
+.headline--jump .char {
+  --name: jump;
+  --dur: 1990ms ;
+  --del: calc(var(--char-index) * 0.075s);
+  --tf: cubic-bezier(0.165, 0.44, 0.64, 1);
+}
+@-webkit-keyframes jump {
+  20% {
+    -webkit-transform: translateY(2%) scaleY(0.9);
+    transform: translateY(2%) scaleY(0.9);
+  }
+  40% {
+    -webkit-transform: translateY(-100%) scaleY(1.2);
+    transform: translateY(-100%) scaleY(1.2);
+  }
+  50% {
+    -webkit-transform: translateY(10%) scaleY(0.8);
+    transform: translateY(10%) scaleY(0.8);
+  }
+  70% {
+    -webkit-transform: translateY(-5%) scaleY(1);
+    transform: translateY(-5%) scaleY(1);
+  }
+  80%,
+  100% {
+    -webkit-transform: translateY(0) scaleY(1);
+    transform: translateY(0) scaleY(1);
+  }
+}
+@keyframes jump {
+  20% {
+    -webkit-transform: translateY(2%) scaleY(0.9);
+    transform: translateY(2%) scaleY(0.9);
+  }
+  40% {
+    -webkit-transform: translateY(-100%) scaleY(1.2);
+    transform: translateY(-100%) scaleY(1.2);
+  }
+  50% {
+    -webkit-transform: translateY(10%) scaleY(0.8);
+    transform: translateY(10%) scaleY(0.8);
+  }
+  70% {
+    -webkit-transform: translateY(-5%) scaleY(1);
+    transform: translateY(-5%) scaleY(1);
+  }
+  80%,
+  100% {
+    -webkit-transform: translateY(0) scaleY(1);
+    transform: translateY(0) scaleY(1);
+  }
+}
+
 button:not(#idStartGame) {
   height: 150px;
   width: 150px;
 }
 
+.swal-button {
+  height: auto !important;
+  width: auto !important;
+}
+
 #idStartGame {
-  background: linear-gradient(85deg, rgb(255, 186, 209), rgb(124, 44, 71)  95%);
+  background: linear-gradient(85deg, rgb(186, 204, 255), rgb(10, 3, 27) 95%);
   height: 50px;
-  width: 350px;
+  width: 316px;
   color: white;
   font-size: 1.5rem;
   font-weight: 500;
+  position: absolute;
+  top: calc(50% + 100px);
+  z-index: 10;
 }
 
 #idGameButton {
@@ -35,7 +148,7 @@ button:not(#idStartGame) {
 }
 
 #blue {
-  background-color: blue;
+  background-color: rgb(0, 0, 134);
   border-top-left-radius: 200px;
 }
 
@@ -52,4 +165,24 @@ button:not(#idStartGame) {
 #green {
   background-color: green;
   border-bottom-right-radius: 200px;
+}
+
+#blue.light {
+  background-color: rgb(119, 119, 255);
+}
+
+#red.light {
+  background-color: rgb(255, 145, 145);
+}
+
+#yellow.light {
+  background-color: rgb(255, 255, 152);
+}
+
+#green.light {
+  background-color: rgb(128, 255, 128);
+}
+
+.hide {
+  display: none !important;
 }
